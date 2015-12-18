@@ -1,0 +1,94 @@
+//SumOfSquares.cpp
+//Author Chad Betts
+
+/* Assignment: 
+Write a Java or C++ program that inputs a list of integer values in the range 
+of -100 to 100 from the keyboard and computes the sum of the squares input values. 
+This program must use exception handling to ensure that the input values are in 
+range and are legal integers.
+*/
+
+#include <iostream>
+using namespace std;
+
+//Quick and easy linked list
+struct node{
+	int value = 0; //0 will not affect sum or squares
+	node *next = NULL;
+};
+
+int getInput();
+int computeSumOfSquares(node*);
+
+/*Main program
+ Returns: 0 at successful completion*/
+int main(void){
+
+	node *root;			//For storing any number of user inputs
+	node *conductor;	//For working from the root	
+	root = new node;	//Create the basic node to spawn from
+	conductor = root;	//Begin at the root of the list
+
+	//Loop for user input
+	while (true){
+		try{
+			conductor->value = getInput();
+			if (conductor->value == 0)
+				break; //quit while loop
+			else
+				cout << "conductor->value: " << conductor->value << endl;
+				conductor->next = new node;
+				conductor = conductor->next;
+		}
+		catch (const char* message){
+			cerr << message << endl;
+		}
+	}//end loop for user input
+
+	cout << "The sum of the squares of the integers you entered is: " << computeSumOfSquares(root) << endl;
+
+	return 0;
+}//end main
+
+/*Prompts the user to enter an integer between -100 and 100.
+ Returns: user's input as integer
+ Throws: NANException if user's input is not an integer
+ Throws: OutOfBoundsException if the user's input is less than -100 or greater than 100
+ */
+int getInput(){
+	int userInput;
+
+	cout << "Please enter an integer between -100 and 100, or 0 to quit:";
+	cin >> userInput;
+
+	//Catch non-integer inputs
+	if (cin.fail()){
+		//Without both clear and ignore, NANException will infinite loop
+		cin.clear();	//Clear the error state from cin
+		cin.ignore();	//Clear the buffer
+		throw "NANException";
+	}//end if
+
+	//Catch inputs that are too high/low
+	if (userInput < -100 || userInput > 100)
+		throw "OutOfBoundsException";
+	
+	return userInput;
+}//end getInput()
+
+/*Computes the sum of squares in a supplied list.
+ Param: list - linked list of integers.
+ Returns: sum of the squares in the list.*/
+int computeSumOfSquares(node *list){
+	node *conductor = list;
+	int workingSum = 0;
+
+	//Iterate through list to compute sum of squares
+	while (conductor->next != NULL){
+		cout << "Value: " << conductor->value << "\tworkingSum: " << workingSum << endl;
+		workingSum += conductor->value * conductor->value;	//Add square of value to working sum
+		conductor = conductor->next;	//Move conductor along
+	}//end loop for sum of squares
+
+	return workingSum;
+}//end computeSumOfSquares(node*)
