@@ -37,89 +37,132 @@ void dateInWords(int month, int day, int year);
 int main(void){
 
 	string userInput = "";
-	int first, second, third = 0;
+	int firstPair, secondPair, thirdPair = 0;
+	bool validFlag = false;
 
 	//Get user input
 	cout << "Enter a date: ";
 	getline(cin, userInput);
 
 	//Parse out the 2-digit pairs
-	first = stoi(userInput.substr(0, 2));
-	second = stoi(userInput.substr(3, 2));
-	third = stoi(userInput.substr(6, 2));
+	firstPair = stoi(userInput.substr(0, 2));
+	secondPair = stoi(userInput.substr(3, 2));
+	thirdPair = stoi(userInput.substr(6, 2));
 
-	//Rule out duplicates
-	
+	//Rule out all values equal
+	if (firstPair == secondPair && secondPair == thirdPair){
+		validFlag = dateInWords(firstPair, secondPair, thirdPair);
+	}
+	else if (firstPair == secondPair){ //Duplicates in 1-2
+		if (dateInWords(firstPair, firstPair, thirdPair))
+			validFlag = true;
+		if (dateInWords(firstPair, thirdPair, firstPair))
+			validFlag = true;
+		if (dateInWords(thirdPair, firstPair, firstPair))
+			validFlag = true;
+	}
+	else if (firstPair == thirdPair){ //Duplicate in 1-3
+		if (dateInWords(firstPair, firstPair, secondPair))
+			validFlag = true;
+		if (dateInWords(firstPair, secondPair, firstPair))
+			validFlag = true;
+		if (dateInWords(secondPair, firstPair, firstPair))
+			validFlag = true;
+	}
+	else if (secondPair == thirdPair){ //Duplicates in 2-3
+		if (dateInWords(secondPair, secondPair, firstPair))
+			validFlag = true;
+		if (dateInWords(secondPair, firstPair, secondPair))
+			validFlag = true;
+		if (dateInWords(firstPair, secondPair, secondPair))
+			validFlag = true;
+	}
+	else{ //No Duplicates, try all combintations
+		if (dateInWords(firstPair, secondPair, thirdPair))
+			validFlag = true;
+		if (dateInWords(firstPair, thirdPair, secondPair))
+			validFlag = true;
+		if (dateInWords(secondPair, firstPair, thirdPair))
+			validFlag = true;
+		if (dateInWords(secondPair, thirdPair, firstPair))
+			validFlag = true;
+		if (dateInWords(thirdPair, firstPair, secondPair))
+			validFlag = true;
+		if (dateInWords(thirdPair, secondPair, firstPair))
+			validFlag = true;
+	}
+
 	//Notify of no valid dates
-
-	//Display dates
-	
+	if (!validFlag){
+		cout << "No valid dates" << endl;
+	}
 
 	return 0;
 }//end main()
 
 
-void dateInWords(int month, int day, int year){	
+bool dateInWords(int month, int day, int year){	
 	//Modify year for 1951 through 2050
 	if (year >= 100)
-		year == -1; //put year into error state
+		return false; // Fail for invalid date
 	else if(year <= 50)
 		year += 2000;
 	else
 		year += 1900;
 
-	if (year != -1){//only if valid year
-		switch (month){
+	switch (month){
 		case 1:
 			if (day <= 31)
 				cout << "January " << day << ", " << year << endl;
-				break;
+			return true;
 		case 2:
-			if (year / 4 == 0 && day <= 29)
+			if (year % 4 == 0 && day <= 29)
 				cout << "February " << day << ", " << year << endl;
 			else if (day <= 28)
 				cout << "February " << day << ", " << year << endl;
-			break;
+			return true;
 		case 3:
 			if (day <= 31)
 				cout << "March " << day << ", " << year << endl;
-			break;
+			return true;
 		case 4:
 			if (day <= 30)
 				cout << "April " << day << ", " << year << endl;
-			break;
+			return true;
 		case 5:
 			if (day <= 31)
 				cout << "May " << day << ", " << year << endl;
-			break;
+			return true;
 		case 6:
 			if (day <= 30)
 				cout << "June " << day << ", " << year << endl;
-			break;
+			return true;
 		case 7:
 			if (day <= 31)
 				cout << "July " << day << ", " << year << endl;
-			break;
+			return true;
 		case 8:
 			if (day <= 31)
 				cout << "August " << day << ", " << year << endl;
-			break;
+			return true;
 		case 9:
 			if (day <= 30)
 				cout << "September " << day << ", " << year << endl;
-			break;
+			return true;
 		case 10:
 			if (day <= 31)
 				cout << "October " << day << ", " << year << endl;
-			break;
+			return true;
 		case 11:
 			if (day <= 30)
 				cout << "November " << day << ", " << year << endl;
-			break;
+			return true;
 		case 12:
 			if (day <= 31)
 				cout << "December " << day << ", " << year << endl;
-			break;
-		}//end switch(month)
-	}//end if(year != -1)
+			return true;
+		default:
+			return false; //Fail for invalid  date
+	}//end switch(month)
+	return false; //Fail for invalid date
 }//end dateInWords()
