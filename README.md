@@ -1,2 +1,2 @@
 # C-Foo
-Screwing around in C/C++
+Snippets and exercises I've done in C++
