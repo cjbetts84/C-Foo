@@ -107,17 +107,16 @@ int main(void){
 			nameFlag = true;	
 			chomp = "";
 			distInRow = 0;
-		}
+		}//End for(row)
 
 		//Output final result
 		cout << "The most isolated village is " << isolatedVillage << ", being " << isolatedMax << "mi from its closest neighbor." << endl;
+		file.close();
+		cout << "Closed file." << endl;
 	}
 	else{
 		cout << "Error opening file." << endl;
 	}
-
-	file.close();
-	cout << "Closed file." << endl;
 
 	return 0;
 }//end main(void)
